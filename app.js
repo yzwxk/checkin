@@ -18,6 +18,26 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 定义自定义中间件函数
+const jsonResponseMiddleware = (req, res, next) => {
+  // 为 res 对象添加一个新的方法，用于统一返回 JSON 格式的响应
+  res.jsonResponse = function (data, code = 200) {
+    // 构造响应对象
+    const response = {
+      data: data,
+      code: code
+    };
+
+    // 发送 JSON 格式的响应
+    res.json(response);
+  };
+
+  // 继续处理下一个中间件或路由处理函数
+  next();
+};
+
+app.use(jsonResponseMiddleware)
+
 app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
