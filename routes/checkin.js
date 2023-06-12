@@ -3,8 +3,10 @@ const router = express.Router();
 const { query } = require('../database/index');
 
 const LOG_TYPE = {
-  NORMAL: 0, // 日常打卡
-  REPLACEMENT: 1 // 补签
+  // 日常打卡
+  NORMAL: 0,
+  // 补签
+  REPLACEMENT: 1
 }
 
 /* GET tasks list. */
@@ -27,7 +29,7 @@ router.post('/create', async function (req, res, next) {
     // 补签打卡
     keys.push('type')
     await query(
-        `INSERT INTO checkin_logs (${keys}) values (${reqBody['user_id']}, ${reqBody['task_id']}, '${reqBody['date']}', 1)`,
+        `INSERT INTO checkin_logs (${keys}) values (${reqBody['user_id']}, ${reqBody['task_id']}, '${reqBody['date']}', ${LOG_TYPE.REPLACEMENT})`,
     );
   }
   res.jsonResponse({});
