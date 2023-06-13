@@ -11,7 +11,14 @@ const LOG_TYPE = {
 
 /* GET tasks list. */
 router.get('/list', async function (req, res, next) {
-  const results = await query('SELECT * FROM checkin_logs');
+  const user_id = req.query['user_id']
+  let results = []
+  if (user_id) {
+    results = await query(`SELECT * FROM checkin_logs WHERE user_id = ${user_id}`);
+  } else {
+    results = await query(`SELECT * FROM checkin_logs`);
+  }
+
   res.jsonResponse(results);
 });
 
